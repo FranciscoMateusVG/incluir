@@ -39,6 +39,8 @@ interface CreateContextOptions {
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
+  console.log("Aqui");
+  console.log(opts);
   return {
     session: opts.session,
     prisma,
