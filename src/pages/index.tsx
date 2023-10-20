@@ -5,7 +5,7 @@ import { isPointWithinRadius } from "geolib";
 import React, { useEffect, useState } from "react";
 import AnchorLink from "~/components/AnchorLink";
 import PageLink from "~/components/PageLink";
-import { api } from "~/utils/api";
+import useUserRepo from "~/hooks/UserRepo";
 
 interface Coordinates {
   latitude: number;
@@ -14,14 +14,19 @@ interface Coordinates {
 
 const Home: React.FC = () => {
   const { user, isLoading } = useUser();
-
+  const { save, getByExternalId } = useUserRepo();
   const [location, setLocation] = useState<Coordinates | null>(null);
   const UFMG_COORDINATES: Coordinates = {
     latitude: -19.8719,
     longitude: -43.9662,
   };
   const UFMG_RADIUS = 1500; // 3 km
-  const createAttendance = api.example.createAttendance.useMutation();
+
+  // Only run the query if user is defined and not loading
+  const shouldFetch = !isLoading && !!user?.sub;
+  const sub = user?.sub ?? "";
+  const { data, refetch } = getByExternalId(sub, { enabled: false });
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -34,6 +39,34 @@ const Home: React.FC = () => {
       alert("Geolocation is not supported by this browser.");
     }
   }, []);
+
+  useEffect(() => {
+    async function fetch() {
+      if (!isLoading && user) {
+        await refetch();
+      }
+    }
+
+    void fetch();
+  }, [user]);
+
+  useEffect(() => {
+    const doesUserExist = !isLoading && data && user;
+
+    if (!doesUserExist && user) {
+      const image = user?.picture ?? "";
+      const name = user?.name ?? "";
+      const email = user?.email ?? "";
+      const sub = user?.sub ?? "";
+
+      save({
+        image,
+        name,
+        email,
+        sub,
+      });
+    }
+  }, [data]);
 
   const isLocatedInsideUFMG = (): boolean => {
     if (location) {
@@ -104,13 +137,6 @@ const Home: React.FC = () => {
           )}
         </div>
       </div>
-      <button
-        onClick={() => {
-          createAttendance.mutate();
-        }}
-      >
-        Click me
-      </button>
     </>
   );
 };

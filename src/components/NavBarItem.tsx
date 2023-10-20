@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname } from "next/navigation";
 //@ts-ignore
 const NavBarItem = ({ children, href, className, icon, tabIndex, testId }) => {
@@ -9,7 +7,6 @@ const NavBarItem = ({ children, href, className, icon, tabIndex, testId }) => {
 
   return (
     <span className="d-inline-flex align-items-center navbar-item">
-      {icon && <FontAwesomeIcon icon={icon} className="mr-3" />}
       <span
         className={pathname === href ? activeClasses : className}
         tabIndex={tabIndex}
