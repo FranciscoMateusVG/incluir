@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "~/components/Button";
+import { Title } from "~/components/Title";
+import { Card } from "../../components/Card";
 import { type Coordinates } from "./Presenca.constants";
 import { getCurrentLocation, isLocatedInsideUFMG } from "./Presenca.utils";
 
@@ -11,8 +14,17 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="rounded-lg bg-white p-6 shadow-lg">
-        <h1 className="mb-4 text-2xl font-bold">My Location App</h1>
+      <Card>
+        <Title>My Location App</Title>
+        <Card>
+          <Button>Estou Aqui!</Button>
+        </Card>
+        <Card model="sea">
+          <Button model="secondary">Sai Daqui!</Button>
+        </Card>
+        <Card model="red">
+          <Button model="disabled">To desabilitado</Button>
+        </Card>
         {location ? (
           <div>
             <p className="mb-2">
@@ -27,7 +39,7 @@ const Home: React.FC = () => {
         ) : (
           <p>Getting your current location...</p>
         )}
-      </div>
+      </Card>
     </div>
   );
 };
