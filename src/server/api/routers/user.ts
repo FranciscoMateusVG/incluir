@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UserSchema } from "~/hooks/UserRepo";
+import { UserSchema } from "~/hooks/userRepo";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const CreateUserInput = UserSchema.omit({

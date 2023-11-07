@@ -1,13 +1,13 @@
 import { isPointWithinRadius } from "geolib";
 import { type GeolibInputCoordinates } from "geolib/es/types";
 import {
-  Coordinates,
   UFMG_COORDINATES,
   UFMG_RADIUS,
+  type Coordinates,
 } from "./Presenca.constants";
 
 export const isLocatedInsideUFMG = (
-  location: GeolibInputCoordinates,
+  location: GeolibInputCoordinates | null,
 ): boolean => {
   if (location) {
     const isWithinRadius = isPointWithinRadius(

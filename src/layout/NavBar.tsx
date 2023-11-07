@@ -1,8 +1,8 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
-import useUserRepo from "~/hooks/UserRepo";
+import { Container } from "~/components/Container";
+import useUserRepo from "~/hooks/userRepo";
 
 const NavBar = () => {
   const { user, isLoading } = useUser();
@@ -41,25 +41,17 @@ const NavBar = () => {
 
   return (
     <div>
-      <Link href="/api/auth/login" className="btn btn-primary btn-margin">
-        Log in
-      </Link>
-
+      {!user && (
+        <Link href="/api/auth/login" className="btn btn-primary btn-margin">
+          Log in
+        </Link>
+      )}
       {user && (
-        <>
-          <Image
-            src={user.picture ?? ""}
-            alt="Profile"
-            className="nav-user-profile rounded-circle"
-            width="50"
-            height="50"
-            data-testid="navbar-picture-desktop"
-          />
-
+        <Container className="flex gap-4">
           <Link href="/profile">Profile</Link>
 
           <Link href="/api/auth/logout">Log out</Link>
-        </>
+        </Container>
       )}
     </div>
   );
