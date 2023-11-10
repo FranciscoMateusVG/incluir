@@ -5,7 +5,7 @@ import { BsFillCalendarDateFill } from "react-icons/bs";
 import { Avatar } from "~/components/Avatar";
 import { Container } from "~/components/Container";
 import { Title } from "~/components/Title";
-import useAttendanceRepo, { AttendanceKeys } from "~/hooks/attendanceRepo";
+import useAttendanceRepo, { type AttendanceKeys } from "~/hooks/attendanceRepo";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { SubTitle } from "../../components/SubTitle";
@@ -14,33 +14,20 @@ import { getCurrentLocation, isLocatedInsideUFMG } from "./Presenca.utils";
 
 const Home: React.FC = () => {
   const [location, setLocation] = useState<Coordinates | null>(null);
-
   const { user } = useUser();
   useEffect(() => {
     getCurrentLocation(setLocation);
   }, []);
 
-  const { save } = useAttendanceRepo();
+  const { saveAttendance } = useAttendanceRepo();
   const isOnUFMG = isLocatedInsideUFMG(location);
 
   const handleSaveAttendance = (attendance: AttendanceKeys) => {
-    const createAttendanceObject = (attendance: AttendanceKeys) => {
-      const dateAndTimeNow = new Date();
-      if (attendance === "left")
-        return { userId: user?.sub ?? "", left: dateAndTimeNow };
-
-      if (attendance === "arrived")
-        return { userId: user?.sub ?? "", arrived: dateAndTimeNow };
-
-      throw new Error("Invalid attendance key");
-    };
-
-    save(createAttendanceObject(attendance));
+    //TODO
   };
 
   return (
     <div className=" row flex min-h-screen flex-col justify-around  bg-gray-50 px-10">
-      <button>TESTIM TESTAO</button>
       <Container className="flex gap-10">
         <Avatar className="" size={150} />
         <div>

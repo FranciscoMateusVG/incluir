@@ -2,42 +2,44 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import { useEffect } from "react";
 import { Container } from "~/components/Container";
-import useUserRepo from "~/hooks/userRepo";
+import useCreateUser from "~/hooks/userRepo/useCreateUser";
+import { updateUser } from "~/signals/user";
 
 const NavBar = () => {
   const { user, isLoading } = useUser();
-  const { save, getByExternalId } = useUserRepo();
+  const { createUser, getByExternalId } = useCreateUser();
   // Only run the query if user is defined and not loading
   const sub = user?.sub ?? "";
-  const { data, refetch } = getByExternalId(sub, { enabled: false });
+  // const { data, refetch } = getByExternalId(sub, { enabled: false });
 
   useEffect(() => {
-    async function fetch() {
-      if (!isLoading && user) {
-        await refetch();
-      }
-    }
+    if (isLoading || !user?.sub) return;
 
-    void fetch();
-  }, [user]);
+    getByExternalId(user.sub)
+      .then((data) => {
+        const doesUserExist = !isLoading && data && user;
 
-  useEffect(() => {
-    const doesUserExist = !isLoading && data && user;
+        if (data) updateUser(data);
 
-    if (!doesUserExist && user) {
-      const image = user?.picture ?? "";
-      const name = user?.name ?? "";
-      const email = user?.email ?? "";
-      const sub = user?.sub ?? "";
+        if (!doesUserExist && user) {
+          console.log("create user");
+          const image = user?.picture ?? "";
+          const name = user?.name ?? "";
+          const email = user?.email ?? "";
+          const sub = user?.sub ?? "";
 
-      save({
-        image,
-        name,
-        email,
-        sub,
+          createUser.mutate({
+            image,
+            name,
+            email,
+            sub,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    }
-  }, [data]);
+  }, [isLoading, user]);
 
   return (
     <div>

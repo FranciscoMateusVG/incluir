@@ -1,12 +1,5 @@
 import { z } from "zod";
-import { UserSchema } from "~/hooks/userRepo";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-
-const CreateUserInput = UserSchema.omit({
-  id: true,
-  role: true,
-  isAdmin: true,
-});
 
 export const userRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -24,14 +17,6 @@ export const userRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       return ctx.prisma.user.findUnique({
         where: { sub: input },
-      });
-    }),
-
-  createUser: publicProcedure
-    .input(CreateUserInput)
-    .mutation(async ({ input, ctx }) => {
-      return ctx.prisma.user.create({
-        data: { ...input },
       });
     }),
 });

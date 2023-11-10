@@ -19,9 +19,12 @@ export const attendanceRouter = createTRPCRouter({
   getAttendance: publicProcedure
     .input(GetAttendance)
     .query(async ({ input, ctx }) => {
-      return ctx.prisma.attendance.findMany({
-        where: { userId: input.userId, createdAt: input.createdAt },
-      });
+      const now = input.createdAt;
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const attendances = await ctx.prisma.attendance.findMany();
+      return attendances;
     }),
 
   createAttendance: publicProcedure

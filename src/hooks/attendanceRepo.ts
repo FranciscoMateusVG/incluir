@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { type Attendance } from "@prisma/client";
-import { useCallback } from "react";
 import { z } from "zod";
-import { api } from "~/utils/api";
 
 type AttendanceWithArrived = {
   userId: Attendance["userId"];
@@ -20,25 +19,23 @@ export type AttendanceType = Pick<Attendance, "arrived" | "left">;
 export type AttendanceKeys = keyof AttendanceType;
 
 function useAttendanceRepo() {
-  const createAttendance = api.attendance.createAttendance.useMutation();
+  // Queries
+  // const query = useQuery("teste", () =>
+  //   axios.get("/api/teste").then((res) => res.data),
+  // );
 
-  const save = useCallback(
-    (attendance: CreateAttendance) => {
-      if (!attendance.userId) {
-        throw new Error("User Id is required");
-      }
+  const saveAttendance = (attendance: CreateAttendance) => {
+    if (!attendance.userId) {
+      throw new Error("User Id is required");
+    }
 
-      createAttendance.mutate(attendance);
-    },
-    [createAttendance],
-  );
+    // createAttendance.mutate(attendance);
+  };
 
   // Instead of fetching data here, return the useQuery functions
-  const getAttendance = api.attendance.getAttendance.useQuery;
 
   return {
-    save,
-    getAttendance,
+    saveAttendance,
   };
 }
 
