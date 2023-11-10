@@ -1,4 +1,4 @@
-import { AttendanceSchema } from "~/hooks/attendanceRepo";
+import { AttendanceSchema } from "~/hooks/attendanceRepo/attendanceRepo";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 

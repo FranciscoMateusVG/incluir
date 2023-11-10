@@ -22,7 +22,6 @@ const NavBar = () => {
         if (data) updateUser(data);
 
         if (!doesUserExist && user) {
-          console.log("create user");
           const image = user?.picture ?? "";
           const name = user?.name ?? "";
           const email = user?.email ?? "";
@@ -39,7 +38,7 @@ const NavBar = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [isLoading, user]);
+  }, [user]);
 
   return (
     <div>

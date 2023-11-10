@@ -1,4 +1,4 @@
-import { type AttendanceKeys } from "~/hooks/attendanceRepo";
+import { type AttendanceKeys } from "~/hooks/attendanceRepo/attendanceRepo";
 import { USER_SIGNAL } from "~/signals/user";
 
 export const createAttendanceObject = (attendance: AttendanceKeys) => {

@@ -1,11 +1,15 @@
-import { useUser } from "@auth0/nextjs-auth0/client";
+/* eslint-disable @typescript-eslint/no-misused-promises */
 
 import React, { useEffect, useState } from "react";
 import { BsFillCalendarDateFill } from "react-icons/bs";
 import { Avatar } from "~/components/Avatar";
 import { Container } from "~/components/Container";
 import { Title } from "~/components/Title";
-import useAttendanceRepo, { type AttendanceKeys } from "~/hooks/attendanceRepo";
+
+import { useSignal } from "@preact/signals-react";
+import useAttendanceRepo from "~/hooks/attendanceRepo/attendanceRepo";
+import { type AttendanceKeys } from "~/hooks/attendanceRepo/attendanceRepo.types";
+import { USER_SIGNAL } from "~/signals/user";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { SubTitle } from "../../components/SubTitle";
@@ -14,24 +18,49 @@ import { getCurrentLocation, isLocatedInsideUFMG } from "./Presenca.utils";
 
 const Home: React.FC = () => {
   const [location, setLocation] = useState<Coordinates | null>(null);
-  const { user } = useUser();
+  const hasArrivedToday = useSignal(false);
+  const hasLeftToday = useSignal(false);
   useEffect(() => {
     getCurrentLocation(setLocation);
   }, []);
 
-  const { saveAttendance } = useAttendanceRepo();
+  const { saveAttendance, getTodaysAttendance } = useAttendanceRepo();
   const isOnUFMG = isLocatedInsideUFMG(location);
 
-  const handleSaveAttendance = (attendance: AttendanceKeys) => {
-    //TODO
+  useEffect(() => {
+    void (async () => {
+      if (!USER_SIGNAL.value.id) return;
+      const attendance = await getTodaysAttendance(USER_SIGNAL.value.id);
+      hasArrivedToday.value = attendance.some((a) => a.arrived);
+      hasLeftToday.value = attendance.some((a) => a.left);
+    })();
+  }, [USER_SIGNAL.value.id]);
+
+  const handleSaveAttendance = async (attendance: AttendanceKeys) => {
+    const userId = USER_SIGNAL.value.id;
+    const createAttendanceObject = (attendance: AttendanceKeys) => {
+      const dateAndTimeNow = new Date();
+      if (attendance === "left")
+        return { userId: userId ?? "", left: dateAndTimeNow };
+
+      if (attendance === "arrived")
+        return { userId: userId ?? "", arrived: dateAndTimeNow };
+
+      throw new Error("Invalid attendance key");
+    };
+
+    await saveAttendance(createAttendanceObject(attendance), userId);
   };
 
   return (
     <div className=" row flex min-h-screen flex-col justify-around  bg-gray-50 px-10">
+      <button onClick={() => console.log(hasLeftToday.value)}>
+        TESTE AQUI SEU MALANDRINHO
+      </button>
       <Container className="flex gap-10">
         <Avatar className="" size={150} />
         <div>
-          <Title className="mb-2">{user?.name}</Title>
+          <Title className="mb-2">{USER_SIGNAL.value.name}</Title>
           <SubTitle Icon={BsFillCalendarDateFill}>
             Última vez que entrou foi em 15/10/2023
           </SubTitle>
