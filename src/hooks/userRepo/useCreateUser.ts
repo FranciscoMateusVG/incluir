@@ -1,7 +1,6 @@
 import { type User } from "@prisma/client";
 import axios from "axios";
 import { useMutation } from "react-query";
-import { api } from "~/utils/api";
 import { type CreateUser } from "./createUser.types";
 
 function useCreateUser() {
@@ -9,8 +8,6 @@ function useCreateUser() {
     axios.post("/api/user/create", input),
   );
 
-  // Instead of fetching data here, return the useQuery functions
-  const getById = api.user.getUserID.useQuery;
   const getByExternalId = (id: string) =>
     axios
       .get("/api/user/get-by-external-id", { params: { id } })
@@ -18,7 +15,6 @@ function useCreateUser() {
 
   return {
     createUser,
-    getById,
     getByExternalId,
   };
 }

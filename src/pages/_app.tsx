@@ -2,7 +2,6 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { type Session } from "next-auth";
 import { type AppType } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { api } from "~/utils/api";
 
 import Layout from "~/layout/Layout";
 import "~/styles/globals.css";
@@ -25,4 +24,4 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default api.withTRPC(MyApp);
+export default MyApp;
