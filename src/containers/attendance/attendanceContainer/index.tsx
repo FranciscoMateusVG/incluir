@@ -18,7 +18,7 @@ export const AttendanceContainer: React.FC = () => {
   }, []);
 
   return (
-    <Container className="flex justify-around ">
+    <Container className="flex flex-col justify-around gap-24 md:flex-row  ">
       <CardAttendance isOnUFMG={isOnUFMG} />
       <CardLocation isOnUFMG={isOnUFMG} location={location.value} />
     </Container>

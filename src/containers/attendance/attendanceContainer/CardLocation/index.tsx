@@ -16,7 +16,7 @@ export const CardLocation: React.FC<CardLocationProps> = ({
     <Card model="sea" className="min-w-[45%]">
       {location ? (
         <Container className="relative flex h-full flex-col justify-center">
-          <SubTitle className="left- absolute top-0">
+          <SubTitle className="top-0 md:absolute">
             Current Location: {location.latitude}, {location.longitude}
           </SubTitle>
 
