@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import React from "react";
+import { Spinner } from "./Spinner";
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   model?: "primary" | "secondary";
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = (props) => {
@@ -12,6 +15,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
     children,
     model = "primary",
     disabled,
+    loading,
     ...restOfProps
   } = props;
 
@@ -25,15 +29,18 @@ export const Button: React.FC<ButtonProps> = (props) => {
     ? ""
     : "transform-gpu transition-transform hover:-translate-y-1 hover:shadow-lg";
 
+  const isDisabledOrLoading = disabled || loading;
+
   return (
     <button
-      disabled={disabled}
-      className={`h-10  w-full rounded-md  active:translate-y-0 ${className}   ${
-        disabled ? "bg-gray-400 text-white" : modelType[model]
+      disabled={isDisabledOrLoading}
+      className={`h-10  w-full  rounded-md   active:translate-y-0 ${className}   ${
+        isDisabledOrLoading ? "bg-gray-400 text-white" : modelType[model]
       }  ${animation}`}
       {...restOfProps}
     >
-      {children}
+      {!loading && children}
+      {loading && <Spinner className="h-7 w-7" />}
     </button>
   );
 };
