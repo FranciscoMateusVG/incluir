@@ -8,7 +8,7 @@ interface CardLocationProps {
   isOnUFMG: boolean;
 }
 
-export const CardLocation: React.FC<CardLocationProps> = ({
+export const SecondaryCard: React.FC<CardLocationProps> = ({
   location,
   isOnUFMG,
 }) => {
