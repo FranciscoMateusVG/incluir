@@ -11,7 +11,7 @@ import {
 export const isLocatedInsideUFMG = (location: Coordinates | null): boolean => {
   if (location) {
     const isWithinRadius = isPointWithinRadius(
-      location,
+      { latitude: location.latitude, longitude: location.longitude },
       UFMG_COORDINATES,
       UFMG_RADIUS,
     );
@@ -59,4 +59,29 @@ export const getTimeFromDate = (date: Date | null | undefined) => {
     hour: "2-digit",
     minute: "2-digit",
   });
+};
+
+export const hasTimePassed = (
+  timeString: string,
+  type: "hour" | "minute" = "hour",
+) => {
+  // Parse the time string and create a date object for today with this time
+  const [hours, minutes] = timeString.split(":").map(Number);
+  const timeDate = new Date();
+  if (!hours || !minutes) throw new Error("Invalid time string");
+  timeDate.setHours(hours, minutes, 0, 0);
+
+  // Get the current time
+  const now = new Date();
+
+  // Calculate the difference in milliseconds
+  const diffMs = now.getTime() - timeDate.getTime();
+
+  // Convert milliseconds to hours and check if an hour has passed
+  const timeDiff = {
+    hour: diffMs / 1000 / 60 / 60,
+    minute: diffMs / 1000 / 60,
+  };
+
+  return timeDiff[type] >= 1;
 };

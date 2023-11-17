@@ -7,7 +7,6 @@ const Home: React.FC = () => {
     <Container className=" row flex min-h-screen flex-col justify-around  bg-gray-50 px-10">
       <AvatarContainer />
       <AttendanceContainer />
-      <Container></Container>
     </Container>
   );
 };

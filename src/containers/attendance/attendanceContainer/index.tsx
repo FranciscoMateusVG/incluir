@@ -3,15 +3,15 @@ import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
 import { Container } from "~/components/Container";
 import { type Coordinates } from "../attendance.constants";
-import { getCurrentLocation, isLocatedInsideUFMG } from "../attendance.utils";
+import { getCurrentLocation } from "../attendance.utils";
 
-import { CardAttendance } from "./CardAttendance";
-import { CardLocation } from "./CardLocation";
+import { CardAttendance } from "./cardAttendance";
+import { CardLocation } from "./cardLocation";
 
 export const AttendanceContainer: React.FC = () => {
   const location = useSignal<Coordinates | null>(null);
 
-  const isOnUFMG = isLocatedInsideUFMG(location.value);
+  const isOnUFMG = true; //isLocatedInsideUFMG(location.value);
 
   useEffect(() => {
     getCurrentLocation(location);

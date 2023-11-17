@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
-import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
 import useAttendanceRepo from "~/hooks/attendanceRepo/attendanceRepo";
 import { type AttendanceKeys } from "~/hooks/attendanceRepo/attendanceRepo.types";
@@ -10,6 +9,8 @@ import {
   createAttendanceObject,
   getTimeFromDate,
 } from "../../attendance.utils";
+import { EstouAquiButton } from "./estouAquiButton";
+import { SaiDaquiButton } from "./saiDaquiButton";
 
 interface CardAttendanceProps {
   isOnUFMG: boolean;
@@ -65,31 +66,20 @@ export const CardAttendance: React.FC<CardAttendanceProps> = ({ isOnUFMG }) => {
       model="sea"
       className="flex min-w-[45%] flex-col items-center justify-center gap-10 py-10"
     >
-      {hasArrivedToday.value ? (
-        <div>Voce ja marcou sua presença hoje as {hasArrivedToday.value} !</div>
-      ) : (
-        <Button
-          disabled={isDisabled()}
-          onClick={() => handleSaveAttendance("arrived")}
-          className="max-w-[50%]"
-          loading={isLoading.value}
-        >
-          Estou Aqui!
-        </Button>
-      )}
-      {hasLeftToday.value ? (
-        <div>Voce ja marcou sua saída hoje as {hasLeftToday.value} !</div>
-      ) : (
-        <Button
-          disabled={isDisabled()}
-          onClick={() => handleSaveAttendance("left")}
-          model="secondary"
-          className="max-w-[50%]"
-          loading={isLoading.value}
-        >
-          Saí Daqui!
-        </Button>
-      )}
+      <EstouAquiButton
+        handleSaveAttendance={handleSaveAttendance}
+        hasArrivedToday={hasArrivedToday.value}
+        isDisabled={isDisabled()}
+        isLoading={isLoading.value}
+      />
+
+      <SaiDaquiButton
+        handleSaveAttendance={handleSaveAttendance}
+        hasArrivedToday={hasArrivedToday.value}
+        hasLeftToday={hasLeftToday.value}
+        isDisabled={isDisabled()}
+        isLoading={isLoading.value}
+      />
     </Card>
   );
 };
