@@ -16,7 +16,7 @@ interface CardAttendanceProps {
   isOnUFMG: boolean;
 }
 
-export const CardAttendance: React.FC<CardAttendanceProps> = ({ isOnUFMG }) => {
+export const MainCard: React.FC<CardAttendanceProps> = ({ isOnUFMG }) => {
   const { saveAttendance, getTodaysAttendance } = useAttendanceRepo();
   const hasArrivedToday = useSignal<null | string>(null);
   const hasLeftToday = useSignal<null | string>(null);

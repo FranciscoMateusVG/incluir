@@ -5,8 +5,8 @@ import { Container } from "~/components/Container";
 import { type Coordinates } from "../attendance.constants";
 import { getCurrentLocation } from "../attendance.utils";
 
-import { CardAttendance } from "./cardAttendance";
 import { CardLocation } from "./cardLocation";
+import { MainCard } from "./mainCard";
 
 export const AttendanceContainer: React.FC = () => {
   const location = useSignal<Coordinates | null>(null);
@@ -19,7 +19,7 @@ export const AttendanceContainer: React.FC = () => {
 
   return (
     <Container className="flex flex-col justify-around gap-24 md:flex-row  ">
-      <CardAttendance isOnUFMG={isOnUFMG} />
+      <MainCard isOnUFMG={isOnUFMG} />
       <CardLocation isOnUFMG={isOnUFMG} location={location.value} />
     </Container>
   );
